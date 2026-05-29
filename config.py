@@ -10,8 +10,8 @@ SEARCH_START_DAYS = 14
 SEARCH_OFFSETS = [42, 70]
 
 # Minimum and maximum trip length in days
-TRIP_MIN_DAYS = 7
-TRIP_MAX_DAYS = 14
+TRIP_MIN_DAYS = 10
+TRIP_MAX_DAYS = 10
 
 # International destinations — ordered by priority
 INTERNATIONAL_DESTINATIONS = [
