@@ -162,7 +162,4 @@ if __name__ == "__main__":
     print_deals(intl, dom, destinations)
 
     all_deals = intl + dom
-    if all_deals:
-        send_deal_alert(all_deals)
-    else:
-        print("No deals found today — no email sent.")
+    send_deal_alert(all_deals)

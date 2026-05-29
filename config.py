@@ -1,7 +1,7 @@
 ORIGIN = "SLC"
 
 # Max price in USD to consider a deal worth reporting
-MAX_PRICE_INTERNATIONAL = 700
+MAX_PRICE_INTERNATIONAL = 1000
 MAX_PRICE_DOMESTIC = 200
 
 # How many days from today to start searching

@@ -16,10 +16,13 @@ def send_deal_alert(deals, kind="international"):
 
     subject = f"Flight Deal Alert from SLC — {date.today()}"
 
-    lines = [f"Found {len(deals)} deal(s) from SLC today!\n"]
-    for d in sorted(deals, key=lambda x: x["price"]):
-        lines.append(f"  ${d['price']}  {d['name']} ({d['code']})  via {d.get('airline', 'Unknown')}")
-        lines.append(f"  Depart: {d['depart']}  Return: {d['return']}\n")
+    if deals:
+        lines = [f"Found {len(deals)} deal(s) from SLC today!\n"]
+        for d in sorted(deals, key=lambda x: x["price"]):
+            lines.append(f"  ${d['price']}  {d['name']} ({d['code']})  via {d.get('airline', 'Unknown')}")
+            lines.append(f"  Depart: {d['depart']}  Return: {d['return']}\n")
+    else:
+        lines = ["No deals found today. Check back tomorrow!"]
 
     body = "\n".join(lines)
 
