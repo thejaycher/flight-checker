@@ -6,19 +6,16 @@ MAX_PRICE_DOMESTIC = 200
 
 # How many days from today to start searching
 SEARCH_START_DAYS = 14
-# How many departure dates to check (one per week)
-SEARCH_WEEKS = 12
+# Check 2 date pairs per destination (6 weeks out, 10 weeks out — both on Tuesdays, cheapest day to fly)
+SEARCH_OFFSETS = [42, 70]
 
 # Minimum and maximum trip length in days
-TRIP_MIN_DAYS = 5
-TRIP_MAX_DAYS = 21
+TRIP_MIN_DAYS = 7
+TRIP_MAX_DAYS = 14
 
-# International destinations to scan
+# International destinations — ordered by priority
 INTERNATIONAL_DESTINATIONS = [
-    ("Tokyo", "NRT"),
-    ("Osaka", "KIX"),
     ("Seoul", "ICN"),
-    ("Bangkok", "BKK"),
     ("Bali", "DPS"),
     ("Singapore", "SIN"),
     ("Hong Kong", "HKG"),
@@ -26,30 +23,15 @@ INTERNATIONAL_DESTINATIONS = [
     ("Paris", "CDG"),
     ("Rome", "FCO"),
     ("Barcelona", "BCN"),
-    ("Amsterdam", "AMS"),
     ("Lisbon", "LIS"),
-    ("Dublin", "DUB"),
-    ("Reykjavik", "KEF"),
-    ("Cancun", "CUN"),
-    ("Mexico City", "MEX"),
-    ("Bogota", "BOG"),
-    ("Lima", "LIM"),
     ("Buenos Aires", "EZE"),
     ("Cape Town", "CPT"),
-    ("Nairobi", "NBO"),
     ("Dubai", "DXB"),
-    ("Sydney", "SYD"),
-    ("Auckland", "AKL"),
 ]
 
 # Domestic destinations (only reported if under MAX_PRICE_DOMESTIC)
 DOMESTIC_DESTINATIONS = [
-    ("New York", "JFK"),
-    ("Miami", "MIA"),
-    ("Chicago", "ORD"),
-    ("New Orleans", "MSY"),
-    ("Nashville", "BNA"),
-    ("Seattle", "SEA"),
-    ("Portland", "PDX"),
     ("Honolulu", "HNL"),
+    ("New Orleans", "MSY"),
+    ("Miami", "MIA"),
 ]

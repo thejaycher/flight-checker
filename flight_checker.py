@@ -11,7 +11,7 @@ load_dotenv()
 API_KEY = os.getenv("SERPAPI_KEY")
 
 STATE_FILE = os.path.join(os.path.dirname(__file__), "state.json")
-DESTINATIONS_PER_RUN = 5
+DESTINATIONS_PER_RUN = 3
 
 
 def load_state():
@@ -78,12 +78,14 @@ def get_todays_destinations():
 
 def find_deals(destinations):
     today = date.today()
-    start = today + timedelta(days=config.SEARCH_START_DAYS)
 
+    # Use fixed offsets (in days) anchored to next Tuesday for cheapest fares
+    days_until_tuesday = (1 - today.weekday()) % 7 or 7
+    next_tuesday = today + timedelta(days=days_until_tuesday)
     date_pairs = [
-        (start + timedelta(weeks=w), start + timedelta(weeks=w, days=trip_len))
-        for w in range(config.SEARCH_WEEKS)
-        for trip_len in [config.TRIP_MIN_DAYS, config.TRIP_MAX_DAYS]
+        (next_tuesday + timedelta(days=offset),
+         next_tuesday + timedelta(days=offset + config.TRIP_MIN_DAYS))
+        for offset in config.SEARCH_OFFSETS
     ]
 
     international_deals = []
