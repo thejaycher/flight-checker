@@ -42,10 +42,15 @@ def search_flights(origin, destination_code, depart_date, return_date):
         best = results.get("best_flights") or results.get("other_flights")
         if not best:
             return None
-        return best[0].get("price")
+        flight = best[0]
+        price = flight.get("price")
+        airlines = list(dict.fromkeys(
+            leg.get("airline", "") for leg in flight.get("flights", []) if leg.get("airline")
+        ))
+        return price, ", ".join(airlines) if airlines else "Unknown"
     except Exception as e:
         print(f"  Error searching {destination_code}: {e}")
-        return None
+        return None, None
 
 
 def get_todays_destinations():
@@ -89,14 +94,16 @@ def find_deals(destinations):
     for name, code, kind in destinations:
         best_price = None
         best_dates = None
+        best_airline = None
 
         for depart, ret in date_pairs:
             checked += 1
             print(f"[{checked}/{total}] Checking {name} ({code}) {depart} -> {ret}   ", end="\r")
-            price = search_flights(config.ORIGIN, code, depart, ret)
+            price, airline = search_flights(config.ORIGIN, code, depart, ret)
             if price and (best_price is None or price < best_price):
                 best_price = price
                 best_dates = (depart, ret)
+                best_airline = airline
             time.sleep(0.5)
 
         if best_price is None:
@@ -108,6 +115,7 @@ def find_deals(destinations):
                 "name": name,
                 "code": code,
                 "price": best_price,
+                "airline": best_airline or "Unknown",
                 "depart": str(best_dates[0]),
                 "return": str(best_dates[1]),
             }
@@ -129,7 +137,7 @@ def print_deals(international, domestic, destinations_checked):
     if international:
         print(f"\n  INTERNATIONAL (under ${config.MAX_PRICE_INTERNATIONAL})\n")
         for d in sorted(international, key=lambda x: x["price"]):
-            print(f"  ${d['price']:>4}  {d['name']} ({d['code']})")
+            print(f"  ${d['price']:>4}  {d['name']} ({d['code']})  via {d['airline']}")
             print(f"         {d['depart']} -> {d['return']}")
     else:
         print("\n  No international deals under threshold today.")
@@ -137,7 +145,7 @@ def print_deals(international, domestic, destinations_checked):
     if domestic:
         print(f"\n  DOMESTIC STEALS (under ${config.MAX_PRICE_DOMESTIC})\n")
         for d in sorted(domestic, key=lambda x: x["price"]):
-            print(f"  ${d['price']:>4}  {d['name']} ({d['code']})")
+            print(f"  ${d['price']:>4}  {d['name']} ({d['code']})  via {d['airline']}")
             print(f"         {d['depart']} -> {d['return']}")
 
     print(f"\n{'=' * 60}")

@@ -18,7 +18,7 @@ def send_deal_alert(deals, kind="international"):
 
     lines = [f"Found {len(deals)} deal(s) from SLC today!\n"]
     for d in sorted(deals, key=lambda x: x["price"]):
-        lines.append(f"  ${d['price']}  {d['name']} ({d['code']})")
+        lines.append(f"  ${d['price']}  {d['name']} ({d['code']})  via {d.get('airline', 'Unknown')}")
         lines.append(f"  Depart: {d['depart']}  Return: {d['return']}\n")
 
     body = "\n".join(lines)
